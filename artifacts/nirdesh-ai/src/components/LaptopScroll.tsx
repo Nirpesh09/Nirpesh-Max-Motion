@@ -120,8 +120,8 @@ export function LaptopScroll() {
               <img
                 src="/nirpesh-screen.jpg"
                 alt="Nirpesh Platform"
-                className="w-full h-full object-cover object-top"
-                style={{ imageRendering: "crisp-edges" }}
+                className="w-full h-full"
+                style={{ objectFit: "fill" }}
               />
 
               {/* Screen glow overlay */}
