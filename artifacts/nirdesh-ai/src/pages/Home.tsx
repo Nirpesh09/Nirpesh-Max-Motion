@@ -2,74 +2,71 @@ import { useEffect, useRef } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Hero3D } from "@/components/Hero3D";
 import { ParticleField } from "@/components/ParticleField";
-import { FeatureCards3D } from "@/components/FeatureCards3D";
-import { TechSection3D } from "@/components/TechSection3D";
 import { AnimatedButton } from "@/components/AnimatedButton";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Zap, Globe, Shield } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 
+const stats = [
+  { icon: Zap, value: "10M+", label: "Queries Processed" },
+  { icon: Globe, value: "150+", label: "Countries Served" },
+  { icon: Shield, value: "99.9%", label: "Uptime Guarantee" },
+];
+
 export default function Home() {
-  const mainRef = useRef<HTMLDivElement>(null);
-  
+  const statsRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
-    // GSAP Scroll Animations
-    const sections = gsap.utils.toArray<HTMLElement>('.animate-section');
-    
-    sections.forEach((section) => {
-      gsap.fromTo(section, 
-        { opacity: 0, y: 100 },
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        ".stat-item",
+        { opacity: 0, y: 40 },
         {
           opacity: 1,
           y: 0,
-          duration: 1,
+          stagger: 0.15,
+          duration: 0.8,
           ease: "power3.out",
-          scrollTrigger: {
-            trigger: section,
-            start: "top 80%",
-            end: "bottom 20%",
-            toggleActions: "play none none reverse"
-          }
+          scrollTrigger: { trigger: ".stats-row", start: "top 80%" },
         }
       );
-    });
-    
-    return () => {
-      ScrollTrigger.getAll().forEach(t => t.kill());
-    };
+    }, statsRef);
+    return () => ctx.revert();
   }, []);
 
   return (
-    <div ref={mainRef} className="min-h-screen bg-background text-foreground overflow-x-hidden selection:bg-primary/30 selection:text-cyan-300">
+    <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
       <Navbar />
       <ParticleField />
-      
-      {/* Hero Section */}
-      <section id="home" className="relative h-screen w-full flex items-center justify-center overflow-hidden">
+
+      {/* Hero */}
+      <section className="relative h-screen w-full flex items-center justify-center overflow-hidden">
         <Hero3D />
-        
-        <div className="relative z-10 container mx-auto px-4 md:px-6 flex flex-col items-center text-center pointer-events-none">
+        <div className="relative z-10 container mx-auto px-4 flex flex-col items-center text-center pointer-events-none">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.2 }}
             className="mb-6 inline-block glass-panel px-6 py-2 rounded-full border border-cyan-500/30 neon-glow"
           >
-            <span className="text-cyan-400 font-orbitron text-sm font-bold tracking-widest uppercase">The Next Evolution</span>
+            <span className="text-cyan-400 font-orbitron text-sm font-bold tracking-widest uppercase">
+              The Next Evolution
+            </span>
           </motion.div>
-          
-          <motion.h1 
+
+          <motion.h1
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1, delay: 0.5 }}
             className="text-6xl md:text-8xl lg:text-9xl font-orbitron font-black text-transparent bg-clip-text bg-gradient-to-b from-white via-cyan-100 to-cyan-900 mb-6 neon-glow leading-tight"
           >
-            Nirdesh AI
+            Nirpesh AI
           </motion.h1>
-          
-          <motion.h2 
+
+          <motion.h2
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 0.8 }}
@@ -77,29 +74,41 @@ export default function Home() {
           >
             The Intelligence Behind Tomorrow
           </motion.h2>
-          
+
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 1 }}
             className="text-lg md:text-xl text-gray-400 max-w-2xl mb-12 font-sans"
           >
-            Nirdesh AI learns, adapts, and evolves — purpose-built to unlock possibilities you haven't imagined yet.
+            Nirpesh AI learns, adapts, and evolves — purpose-built to unlock
+            possibilities you haven't imagined yet.
           </motion.p>
-          
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 1.2 }}
             className="flex flex-col sm:flex-row gap-6 pointer-events-auto"
           >
-            <AnimatedButton variant="primary">Start for Free</AnimatedButton>
-            <AnimatedButton variant="outline">Watch Demo</AnimatedButton>
+            <a
+              href="https://nirpesh-ai.lovable.app"
+              target="_blank"
+              rel="noopener noreferrer"
+              data-testid="link-cta-hero"
+            >
+              <AnimatedButton variant="primary">Get Started Free</AnimatedButton>
+            </a>
+            <a
+              href="/features"
+              data-testid="link-explore"
+            >
+              <AnimatedButton variant="outline">Explore Features</AnimatedButton>
+            </a>
           </motion.div>
         </div>
-        
-        {/* Scroll indicator */}
-        <motion.div 
+
+        <motion.div
           animate={{ y: [0, 10, 0] }}
           transition={{ repeat: Infinity, duration: 2 }}
           className="absolute bottom-10 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center text-cyan-500/50"
@@ -109,129 +118,70 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* Features Section */}
-      <section id="features" className="relative py-32 w-full animate-section">
-        <div className="absolute inset-0 bg-gradient-to-b from-background via-cyan-900/5 to-background z-0" />
-        <div className="grid-bg absolute inset-0 z-0 opacity-20" />
-        
-        <div className="container mx-auto px-4 md:px-6 relative z-10">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-orbitron font-bold text-white mb-6">Cognitive Architecture</h2>
-            <p className="text-xl text-cyan-200/60 max-w-2xl mx-auto font-sans">
-              Built on a foundation of unconstrained computational logic, delivering unprecedented reasoning capabilities.
-            </p>
-          </div>
-          
-          <FeatureCards3D />
-        </div>
-      </section>
-
-      {/* Technology Section */}
-      <section id="technology" className="relative py-32 w-full animate-section bg-black">
-        <div className="container mx-auto px-4 md:px-6 relative z-10">
-          <div className="flex flex-col lg:flex-row items-center gap-16">
-            <div className="w-full lg:w-1/2">
-              <TechSection3D />
-            </div>
-            
-            <div className="w-full lg:w-1/2 space-y-8">
-              <div className="inline-block glass-panel px-4 py-1 rounded-full border border-primary/30">
-                <span className="text-primary font-orbitron text-xs font-bold tracking-widest uppercase">Deep Tech</span>
-              </div>
-              
-              <h2 className="text-4xl md:text-6xl font-orbitron font-bold text-white leading-tight">
-                Quantum-Resilient <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600">Core Engine</span>
-              </h2>
-              
-              <p className="text-lg text-gray-400 font-sans leading-relaxed">
-                Beneath the surface lies a polymorphic inference engine. Nirdesh AI doesn't just process data; it understands context, intent, and nuance at a level previously thought impossible for synthetic systems.
-              </p>
-              
-              <ul className="space-y-6 mt-8">
-                {[
-                  "Self-healing neural pathways",
-                  "Zero-latency edge distribution",
-                  "Cryptographic memory vaults"
-                ].map((item, i) => (
-                  <li key={i} className="flex items-center gap-4 text-cyan-100 font-sans">
-                    <div className="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_10px_rgba(0,255,255,0.8)]" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              
-              <div className="pt-8">
-                <AnimatedButton variant="primary">Explore the Platform</AnimatedButton>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section id="pricing" className="relative py-40 w-full animate-section overflow-hidden">
-        <div className="absolute inset-0 bg-blue-900/10 mix-blend-screen" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-cyan-500/20 rounded-full blur-[120px] pointer-events-none" />
-        
-        <div className="container mx-auto px-4 relative z-10 text-center">
-          <h2 className="text-5xl md:text-7xl font-orbitron font-black text-white mb-8">
-            Ready to <span className="text-cyan-400">Initialize?</span>
-          </h2>
-          <p className="text-xl text-gray-300 mb-12 max-w-2xl mx-auto">
-            Join the elite organizations powering their future with Nirdesh AI. System access is currently available.
-          </p>
-          
-          <div className="flex flex-col sm:flex-row justify-center gap-6">
-            <AnimatedButton variant="primary" className="text-xl px-12 py-6">Deploy Now</AnimatedButton>
-            <AnimatedButton variant="outline" className="text-xl px-12 py-6 text-white border-white hover:bg-white/10">Contact Sales</AnimatedButton>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer id="about" className="relative border-t border-white/10 bg-black pt-20 pb-10">
-        <div className="container mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
-            <div className="col-span-1 md:col-span-2">
-              <div className="flex items-center gap-2 mb-6">
-                <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center neon-glow">
-                  <span className="text-primary-foreground font-bold font-orbitron">N</span>
+      {/* Stats */}
+      <section ref={statsRef} className="relative py-24 bg-black/60 border-y border-white/5">
+        <div className="grid-bg absolute inset-0 opacity-10" />
+        <div className="container mx-auto px-4 stats-row">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {stats.map((s, i) => (
+              <div
+                key={i}
+                className="stat-item glass-panel rounded-2xl p-8 flex flex-col items-center text-center border border-cyan-500/10 hover:border-cyan-500/40 transition-all duration-300"
+                data-testid={`stat-item-${i}`}
+              >
+                <div className="w-14 h-14 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center mb-4">
+                  <s.icon size={28} className="text-cyan-400" />
                 </div>
-                <span className="font-orbitron font-bold text-xl tracking-wider text-white">Nirdesh AI</span>
+                <span className="text-5xl font-orbitron font-black text-white mb-2 neon-glow">
+                  {s.value}
+                </span>
+                <span className="text-gray-400 font-sans text-sm uppercase tracking-widest">
+                  {s.label}
+                </span>
               </div>
-              <p className="text-gray-500 max-w-sm">
-                The most advanced artificial intelligence platform, designed to solve the unsolvable.
-              </p>
-            </div>
-            
-            <div>
-              <h4 className="font-orbitron text-white mb-6 font-bold">Platform</h4>
-              <ul className="space-y-4 text-gray-500">
-                <li><a href="#" className="hover:text-cyan-400 transition-colors">Neural Processing</a></li>
-                <li><a href="#" className="hover:text-cyan-400 transition-colors">Quantum Core</a></li>
-                <li><a href="#" className="hover:text-cyan-400 transition-colors">Security</a></li>
-                <li><a href="#" className="hover:text-cyan-400 transition-colors">Pricing</a></li>
-              </ul>
-            </div>
-            
-            <div>
-              <h4 className="font-orbitron text-white mb-6 font-bold">Company</h4>
-              <ul className="space-y-4 text-gray-500">
-                <li><a href="#" className="hover:text-cyan-400 transition-colors">About Us</a></li>
-                <li><a href="#" className="hover:text-cyan-400 transition-colors">Careers</a></li>
-                <li><a href="#" className="hover:text-cyan-400 transition-colors">Research</a></li>
-                <li><a href="#" className="hover:text-cyan-400 transition-colors">Contact</a></li>
-              </ul>
-            </div>
+            ))}
           </div>
-          
-          <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between text-gray-600 text-sm">
-            <p>© {new Date().getFullYear()} Nirdesh AI Systems. All rights reserved.</p>
-            <div className="flex gap-6 mt-4 md:mt-0">
-              <a href="#" className="hover:text-cyan-400">Privacy Policy</a>
-              <a href="#" className="hover:text-cyan-400">Terms of Service</a>
+        </div>
+      </section>
+
+      {/* Final CTA */}
+      <section className="relative py-40 overflow-hidden">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cyan-500/15 rounded-full blur-[100px] pointer-events-none" />
+        <div className="container mx-auto px-4 relative z-10 text-center">
+          <motion.h2
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="text-5xl md:text-7xl font-orbitron font-black text-white mb-8"
+          >
+            Ready to <span className="text-cyan-400">Initialize?</span>
+          </motion.h2>
+          <p className="text-xl text-gray-300 mb-12 max-w-2xl mx-auto">
+            Join the elite organizations powering their future with Nirpesh AI. System access is currently available.
+          </p>
+          <a
+            href="https://nirpesh-ai.lovable.app"
+            target="_blank"
+            rel="noopener noreferrer"
+            data-testid="link-cta-bottom"
+          >
+            <AnimatedButton variant="primary" className="text-xl px-16 py-6">
+              Get Access Now
+            </AnimatedButton>
+          </a>
+        </div>
+      </section>
+
+      <footer className="border-t border-white/10 bg-black pt-16 pb-8">
+        <div className="container mx-auto px-6 flex flex-col md:flex-row items-center justify-between text-gray-600 text-sm gap-4">
+          <div className="flex items-center gap-2">
+            <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center">
+              <span className="text-primary-foreground font-bold font-orbitron text-xs">N</span>
             </div>
+            <span className="font-orbitron text-white font-bold">Nirpesh AI</span>
           </div>
+          <p>© {new Date().getFullYear()} Nirpesh AI Systems. All rights reserved.</p>
         </div>
       </footer>
     </div>

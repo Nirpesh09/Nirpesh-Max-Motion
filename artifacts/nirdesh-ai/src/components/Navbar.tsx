@@ -27,30 +27,33 @@ export function Navbar() {
             <span className="text-primary-foreground font-bold font-orbitron">N</span>
           </div>
           <span className="font-orbitron font-bold text-xl tracking-wider text-foreground">
-            Nirdesh AI
+            Nirpesh AI
           </span>
         </Link>
 
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center gap-8">
           {navLinks.map((link) => (
-            <a
+            <Link
               key={link}
-              href={`#${link.toLowerCase()}`}
+              href={`/${link.toLowerCase()}`}
               className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
             >
               {link}
-            </a>
+            </Link>
           ))}
-          <Button className="btn-3d bg-primary text-primary-foreground hover:bg-primary/90 font-orbitron">
-            Start for Free
-          </Button>
+          <a href="https://nirpesh-ai.lovable.app" target="_blank" rel="noopener noreferrer">
+            <Button className="btn-3d bg-primary text-primary-foreground hover:bg-primary/90 font-orbitron">
+              Start for Free
+            </Button>
+          </a>
         </nav>
 
         {/* Mobile Toggle */}
         <button
           className="md:hidden z-50 text-foreground"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          data-testid="button-mobile-menu"
         >
           {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
@@ -63,18 +66,20 @@ export function Navbar() {
         } md:hidden`}
       >
         {navLinks.map((link) => (
-          <a
+          <Link
             key={link}
-            href={`#${link.toLowerCase()}`}
+            href={`/${link.toLowerCase()}`}
             className="text-2xl font-orbitron font-bold text-foreground hover:text-primary transition-colors"
             onClick={() => setMobileMenuOpen(false)}
           >
             {link}
-          </a>
+          </Link>
         ))}
-        <Button className="btn-3d bg-primary text-primary-foreground hover:bg-primary/90 font-orbitron mt-4 px-8 py-6 text-lg">
-          Start for Free
-        </Button>
+        <a href="https://nirpesh-ai.lovable.app" target="_blank" rel="noopener noreferrer" onClick={() => setMobileMenuOpen(false)}>
+          <Button className="btn-3d bg-primary text-primary-foreground hover:bg-primary/90 font-orbitron mt-4 px-8 py-6 text-lg">
+            Start for Free
+          </Button>
+        </a>
       </div>
     </header>
   );
