@@ -3,6 +3,7 @@ import { Navbar } from "@/components/Navbar";
 import { Hero3D } from "@/components/Hero3D";
 import { ParticleField } from "@/components/ParticleField";
 import { AnimatedButton } from "@/components/AnimatedButton";
+import { LaptopScroll } from "@/components/LaptopScroll";
 import { motion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -117,6 +118,9 @@ export default function Home() {
           <div className="w-[1px] h-16 bg-gradient-to-b from-cyan-500 to-transparent" />
         </motion.div>
       </section>
+
+      {/* Laptop Scroll Section */}
+      <LaptopScroll />
 
       {/* Stats */}
       <section ref={statsRef} className="relative py-24 bg-black/60 border-y border-white/5">
