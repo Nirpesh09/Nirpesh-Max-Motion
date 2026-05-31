@@ -1,12 +1,13 @@
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { AnimatedButton } from "@/components/AnimatedButton";
+import { FloatingCode } from "@/components/FloatingCode";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Float, OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
 import { useRef, useMemo } from "react";
 import { WebGLErrorBoundary } from "@/components/WebGLErrorBoundary";
-import { Building, Target, Zap, Users } from "lucide-react";
+import { Building, Target, Zap, Users, Mail, MessageSquare, LifeBuoy } from "lucide-react";
 import { motion } from "framer-motion";
 
 function Globe3D() {
@@ -56,6 +57,11 @@ export default function About() {
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
       <Navbar />
+
+      {/* Floating code background — whole page */}
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <FloatingCode count={22} />
+      </div>
       
       {/* Hero */}
       <section className="pt-40 pb-20 px-4 md:px-6 relative z-10 text-center container mx-auto">
@@ -221,6 +227,98 @@ export default function About() {
                 <div className="font-orbitron font-bold text-white tracking-widest">{press.outlet}</div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Support Section */}
+      <section className="py-24 relative z-10 bg-black/60">
+        <FloatingCode count={10} className="opacity-50" />
+        <div className="container mx-auto px-4 md:px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
+            <p className="text-cyan-400 font-orbitron text-xs tracking-[0.3em] uppercase mb-4">Need Help?</p>
+            <h2 className="text-4xl md:text-6xl font-orbitron font-black text-white mb-6">
+              We're Here to <span className="text-cyan-400">Support You</span>
+            </h2>
+            <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+              Have a question, feedback, or need assistance? Our team responds within 24 hours.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-14">
+            {[
+              {
+                icon: Mail,
+                title: "Email Support",
+                desc: "Drop us a message and we'll get back to you promptly.",
+                action: "mailto:ainirpesh@gmail.com",
+                label: "ainirpesh@gmail.com",
+                highlight: true,
+              },
+              {
+                icon: MessageSquare,
+                title: "Live Chat",
+                desc: "Chat with our team directly on the platform.",
+                action: "https://nirpesh-ai.lovable.app",
+                label: "Open Platform",
+                highlight: false,
+              },
+              {
+                icon: LifeBuoy,
+                title: "Help Center",
+                desc: "Browse guides, tutorials, and FAQs.",
+                action: "https://nirpesh-ai.lovable.app",
+                label: "Visit Docs",
+                highlight: false,
+              },
+            ].map((item, i) => (
+              <motion.a
+                key={i}
+                href={item.action}
+                target={item.action.startsWith("mailto") ? undefined : "_blank"}
+                rel="noopener noreferrer"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                whileHover={{ scale: 1.03, y: -4 }}
+                className={`glass-panel p-8 rounded-2xl flex flex-col items-center text-center cursor-pointer transition-all group
+                  ${item.highlight ? "border-cyan-500/40 shadow-[0_0_30px_rgba(0,255,255,0.08)]" : "border-white/10"}`}
+              >
+                <div className={`w-16 h-16 rounded-full flex items-center justify-center mb-5 transition-colors
+                  ${item.highlight ? "bg-cyan-500/20 border border-cyan-500/40 group-hover:bg-cyan-500/30" : "bg-white/5 border border-white/10 group-hover:border-cyan-500/30"}`}>
+                  <item.icon size={26} className={item.highlight ? "text-cyan-400" : "text-gray-400 group-hover:text-cyan-400"} />
+                </div>
+                <h3 className="font-orbitron font-bold text-white text-lg mb-2">{item.title}</h3>
+                <p className="text-gray-400 text-sm mb-4">{item.desc}</p>
+                <span className={`text-sm font-medium font-mono ${item.highlight ? "text-cyan-400" : "text-gray-500 group-hover:text-cyan-400"} transition-colors`}>
+                  {item.label}
+                </span>
+              </motion.a>
+            ))}
+          </div>
+
+          {/* Big email CTA */}
+          <div className="text-center">
+            <motion.a
+              href="mailto:ainirpesh@gmail.com"
+              whileHover={{ scale: 1.04 }}
+              className="inline-flex items-center gap-3 px-10 py-5 rounded-2xl font-orbitron font-bold text-black text-lg transition-all"
+              style={{
+                background: "linear-gradient(135deg, #00ffff 0%, #0088ff 100%)",
+                boxShadow: "0 0 30px rgba(0,255,255,0.4), 0 4px 20px rgba(0,0,0,0.3)",
+              }}
+            >
+              <Mail size={22} />
+              Send us an Email
+            </motion.a>
+            <p className="text-gray-600 text-xs mt-4 font-mono">ainirpesh@gmail.com</p>
           </div>
         </div>
       </section>

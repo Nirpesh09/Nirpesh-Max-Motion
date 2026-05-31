@@ -1,5 +1,6 @@
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { FloatingCode } from "@/components/FloatingCode";
 import { TechSection3D } from "@/components/TechSection3D";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Float, OrbitControls } from "@react-three/drei";
@@ -65,6 +66,9 @@ function NetworkGraph() {
 export default function Technology() {
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <FloatingCode count={20} />
+      </div>
       <Navbar />
       
       {/* Hero */}

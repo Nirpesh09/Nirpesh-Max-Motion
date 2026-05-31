@@ -1,5 +1,6 @@
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { FloatingCode } from "@/components/FloatingCode";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Float } from "@react-three/drei";
 import { Brain, Cpu, Zap, Activity, Layers, Infinity as InfinityIcon } from "lucide-react";
@@ -90,6 +91,9 @@ function FloatingShapes() {
 export default function Features() {
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden selection:bg-primary/30 selection:text-cyan-300">
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <FloatingCode count={20} />
+      </div>
       <Navbar />
       
       {/* 3D Header Section */}

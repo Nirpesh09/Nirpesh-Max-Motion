@@ -4,6 +4,7 @@ import { Hero3D } from "@/components/Hero3D";
 import { ParticleField } from "@/components/ParticleField";
 import { AnimatedButton } from "@/components/AnimatedButton";
 import { LaptopScroll } from "@/components/LaptopScroll";
+import { FloatingCode } from "@/components/FloatingCode";
 import { motion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -40,6 +41,9 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <FloatingCode count={20} />
+      </div>
       <Navbar />
       <ParticleField />
 

@@ -8,6 +8,7 @@ import Features from "@/pages/Features";
 import Technology from "@/pages/Technology";
 import Pricing from "@/pages/Pricing";
 import About from "@/pages/About";
+import { LoadingScreen } from "@/components/LoadingScreen";
 
 const queryClient = new QueryClient();
 
@@ -28,6 +29,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
+        <LoadingScreen />
         <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
           <Router />
         </WouterRouter>
