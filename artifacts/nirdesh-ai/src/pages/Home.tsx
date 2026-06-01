@@ -5,6 +5,9 @@ import { ParticleField } from "@/components/ParticleField";
 import { AnimatedButton } from "@/components/AnimatedButton";
 import { LaptopScroll } from "@/components/LaptopScroll";
 import { FloatingCode } from "@/components/FloatingCode";
+import { CodeRain3D } from "@/components/CodeRain3D";
+import { CodePanels3D } from "@/components/CodePanels3D";
+import { CodeOrbit3D } from "@/components/CodeOrbit3D";
 import { motion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -148,6 +151,59 @@ export default function Home() {
                 </span>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── 3D Code Universe ── */}
+      <section className="relative py-10 overflow-hidden bg-black border-y border-white/5">
+        {/* Code rain background */}
+        <div className="absolute inset-0 opacity-30">
+          <CodeRain3D />
+        </div>
+
+        <div className="relative z-10 container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+            className="text-center mb-6"
+          >
+            <p className="text-cyan-400 font-orbitron text-xs tracking-[0.35em] uppercase mb-3">Under the Hood</p>
+            <h2 className="text-4xl md:text-6xl font-orbitron font-black text-white mb-4">
+              Built with <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500">Pure Intelligence</span>
+            </h2>
+            <p className="text-gray-400 max-w-xl mx-auto text-lg">Real AI architecture. Real inference. Every token computed at the edge of what's possible.</p>
+          </motion.div>
+
+          {/* Two-column: orbit + panels */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 items-center">
+            {/* Orbit */}
+            <motion.div
+              initial={{ opacity: 0, x: -40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              className="flex flex-col items-center"
+            >
+              <p className="font-orbitron text-sm text-cyan-400/70 tracking-widest uppercase mb-4">AI Core — Live Ops</p>
+              <CodeOrbit3D className="w-full" style={{ height: 520 }} />
+            </motion.div>
+
+            {/* Panels */}
+            <motion.div
+              initial={{ opacity: 0, x: 40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.1 }}
+              className="flex flex-col items-center"
+            >
+              <p className="font-orbitron text-sm text-orange-400/70 tracking-widest uppercase mb-4">Engine Source Code</p>
+              <div className="relative w-full" style={{ height: 520 }}>
+                <CodePanels3D className="w-full h-full" />
+              </div>
+            </motion.div>
           </div>
         </div>
       </section>

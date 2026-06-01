@@ -1,6 +1,8 @@
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { FloatingCode } from "@/components/FloatingCode";
+import { CodeRain3D } from "@/components/CodeRain3D";
+import { CodePanels3D } from "@/components/CodePanels3D";
 import { TechSection3D } from "@/components/TechSection3D";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Float, OrbitControls } from "@react-three/drei";
@@ -178,6 +180,40 @@ export default function Technology() {
               </tr>
             </tbody>
           </table>
+        </div>
+      </section>
+
+      {/* ── 3D Code Showcase ── */}
+      <section className="relative overflow-hidden bg-black border-t border-white/5">
+        {/* Code rain fills the background */}
+        <div className="absolute inset-0 opacity-25 pointer-events-none">
+          <CodeRain3D />
+        </div>
+
+        <div className="relative z-10 container mx-auto px-4 py-20">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-10"
+          >
+            <p className="text-orange-400 font-orbitron text-xs tracking-[0.35em] uppercase mb-3">Engine Room</p>
+            <h2 className="text-3xl md:text-5xl font-orbitron font-black text-white mb-4">
+              The Code That <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-red-500">Thinks</span>
+            </h2>
+            <p className="text-gray-400 max-w-xl mx-auto">Three live inference modules spinning in real time — this is what runs under every request.</p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+            className="relative w-full"
+            style={{ height: 560 }}
+          >
+            <CodePanels3D className="w-full h-full" />
+          </motion.div>
         </div>
       </section>
 

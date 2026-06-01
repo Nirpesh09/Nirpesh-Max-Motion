@@ -1,6 +1,7 @@
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { FloatingCode } from "@/components/FloatingCode";
+import { CodeOrbit3D } from "@/components/CodeOrbit3D";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Float } from "@react-three/drei";
 import { Brain, Cpu, Zap, Activity, Layers, Infinity as InfinityIcon } from "lucide-react";
@@ -201,6 +202,28 @@ export default function Features() {
         </div>
       </section>
       
+      {/* ── 3D Code Orbit Section ── */}
+      <section className="relative py-20 bg-black overflow-hidden border-t border-white/5">
+        <div className="absolute inset-0 pointer-events-none">
+          <FloatingCode count={14} />
+        </div>
+        <div className="container mx-auto px-4 relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-6"
+          >
+            <p className="text-cyan-400 font-orbitron text-xs tracking-[0.35em] uppercase mb-3">Live AI Core</p>
+            <h2 className="text-3xl md:text-5xl font-orbitron font-black text-white mb-4">
+              Every Feature, <span className="text-cyan-400">Orbiting the Core</span>
+            </h2>
+            <p className="text-gray-400 max-w-xl mx-auto">All capabilities spiral from a single unified intelligence engine.</p>
+          </motion.div>
+          <CodeOrbit3D className="w-full mx-auto" style={{ height: 560, maxWidth: 600 }} />
+        </div>
+      </section>
+
       <Footer />
     </div>
   );
