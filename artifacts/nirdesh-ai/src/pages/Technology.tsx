@@ -1,214 +1,333 @@
+import { useRef, useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import { FloatingCode } from "@/components/FloatingCode";
+import { MatrixRain } from "@/components/MatrixRain";
 import { CodeRain3D } from "@/components/CodeRain3D";
 import { CodePanels3D } from "@/components/CodePanels3D";
-import { TechSection3D } from "@/components/TechSection3D";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { Float, OrbitControls } from "@react-three/drei";
-import * as THREE from "three";
-import { useRef, useMemo } from "react";
-import { WebGLErrorBoundary } from "@/components/WebGLErrorBoundary";
-import { motion } from "framer-motion";
+import { NeuralNet3D } from "@/components/NeuralNet3D";
+import { DigitalHelix } from "@/components/DigitalHelix";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { Cpu, Zap, Database, Globe, Lock, Code2, ChevronRight } from "lucide-react";
 
-function NetworkGraph() {
-  const group = useRef<THREE.Group>(null!);
-  
-  const nodes = useMemo(() => {
-    const temp = [];
-    for (let i = 0; i < 30; i++) {
-      temp.push(new THREE.Vector3(
-        (Math.random() - 0.5) * 6,
-        (Math.random() - 0.5) * 6,
-        (Math.random() - 0.5) * 6
-      ));
-    }
-    return temp;
-  }, []);
+const SPECS = [
+  { label: "Model Parameters", value: "1.2 Trillion", detail: "Dynamic Sparse Routing", pct: 98, color: "#00ffcc" },
+  { label: "Average Latency", value: "~42ms", detail: "Edge-cached globally", pct: 95, color: "#ff6600" },
+  { label: "Context Window", value: "256K Tokens", detail: "Infinite rolling buffer via RAG", pct: 92, color: "#aa44ff" },
+  { label: "Throughput", value: "150,000 req/s", detail: "Per inference shard", pct: 88, color: "#00aaff" },
+  { label: "Modality Support", value: "6 Modalities", detail: "Text, Image, Audio, Code, Video, 3D", pct: 82, color: "#ffcc00" },
+  { label: "Security Protocol", value: "SOC2 Type II", detail: "HIPAA + End-to-End Encryption", pct: 100, color: "#ff3c64" },
+];
 
-  const lines = useMemo(() => {
-    const temp = [];
-    for (let i = 0; i < nodes.length; i++) {
-      for (let j = i + 1; j < nodes.length; j++) {
-        if (nodes[i].distanceTo(nodes[j]) < 2.5) {
-          temp.push([nodes[i], nodes[j]]);
-        }
-      }
-    }
-    return temp;
-  }, [nodes]);
+const ARCH_LAYERS = [
+  { icon: Globe, step: "01", title: "Input Layer", color: "#00ffcc",
+    desc: "Multi-modal ingestion pipeline — normalizes all data formats with zero fidelity loss at intake." },
+  { icon: Cpu, step: "02", title: "Processing Core", color: "#ff6600",
+    desc: "Distributed GPU clusters running sparse transformer inference with predictive request caching." },
+  { icon: Code2, step: "03", title: "Output Synthesis", color: "#aa44ff",
+    desc: "Contextual refinement and adaptive formatting, tuned to each query's intent and protocol." },
+  { icon: Zap, step: "04", title: "Edge Distribution", color: "#00aaff",
+    desc: "Global edge mesh delivering sub-50ms guaranteed latency to 150+ countries without exception." },
+];
 
-  useFrame((state) => {
-    if (group.current) {
-      group.current.rotation.y = state.clock.elapsedTime * 0.05;
-      group.current.rotation.x = state.clock.elapsedTime * 0.03;
-    }
-  });
+const TECH_STACK = [
+  { name: "CUDA 12.4", color: "#76b900", desc: "Custom CUDA kernels for flash attention" },
+  { name: "PyTorch 2.3", color: "#ee4c2c", desc: "Distributed training & FSDP" },
+  { name: "Triton", color: "#00aaff", desc: "GPU kernel auto-tuning" },
+  { name: "Rust (core)", color: "#f97316", desc: "Zero-latency inference server" },
+  { name: "ONNX Runtime", color: "#ff6600", desc: "Cross-platform optimization" },
+  { name: "WebGPU", color: "#aa44ff", desc: "Browser-native inference" },
+  { name: "FlashAttention v3", color: "#00ffcc", desc: "O(n) memory attention" },
+  { name: "vLLM", color: "#ffcc00", desc: "Continuous batching engine" },
+];
 
+function SpecBar({ spec, i }: { spec: typeof SPECS[0]; i: number }) {
+  const [visible, setVisible] = useState(false);
   return (
-    <group ref={group}>
-      {nodes.map((pos, i) => (
-        <mesh key={`node-${i}`} position={pos}>
-          <sphereGeometry args={[0.08, 16, 16]} />
-          <meshBasicMaterial color="#00ffff" />
-        </mesh>
-      ))}
-      {lines.map((line, i) => {
-        const geometry = new THREE.BufferGeometry().setFromPoints(line);
-        return (
-          <line key={`line-${i}`} geometry={geometry}>
-            <lineBasicMaterial color="#0066ff" transparent opacity={0.3} />
-          </line>
-        );
-      })}
-    </group>
+    <motion.div
+      initial={{ opacity: 0, x: -30 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      viewport={{ once: true, rootMargin: "-40px" }}
+      transition={{ delay: i * 0.08, duration: 0.6 }}
+      onViewportEnter={() => setVisible(true)}
+      className="group relative p-5 rounded-2xl overflow-hidden"
+      style={{
+        background: "rgba(4,8,20,0.7)",
+        border: "1px solid rgba(255,255,255,0.06)",
+        transition: "border-color 0.3s, box-shadow 0.3s",
+      }}
+      whileHover={{ scale: 1.01, borderColor: spec.color + "55", boxShadow: `0 0 30px ${spec.color}15` } as any}
+    >
+      <div className="flex items-start justify-between mb-3">
+        <div>
+          <p className="font-mono text-xs text-gray-500 uppercase tracking-wider mb-1">{spec.label}</p>
+          <p className="font-orbitron font-black text-xl text-white">{spec.value}</p>
+        </div>
+        <div className="text-right">
+          <span className="font-orbitron font-black text-2xl" style={{ color: spec.color }}>{spec.pct}%</span>
+        </div>
+      </div>
+      <p className="font-mono text-xs text-gray-500 mb-3">{spec.detail}</p>
+
+      {/* Bar */}
+      <div className="h-1.5 rounded-full bg-white/5 overflow-hidden">
+        <motion.div
+          initial={{ width: 0 }}
+          animate={visible ? { width: `${spec.pct}%` } : { width: 0 }}
+          transition={{ duration: 1.4, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
+          className="h-full rounded-full"
+          style={{
+            background: `linear-gradient(90deg, ${spec.color}88, ${spec.color})`,
+            boxShadow: `0 0 10px ${spec.color}66`,
+          }}
+        />
+      </div>
+
+      {/* Glow on hover */}
+      <div className="absolute inset-0 rounded-2xl pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+        style={{ background: `radial-gradient(circle at 0% 50%, ${spec.color}08, transparent 60%)` }} />
+    </motion.div>
   );
 }
 
 export default function Technology() {
   return (
-    <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        <FloatingCode count={20} />
-      </div>
+    <div className="min-h-screen bg-black text-white overflow-x-hidden">
       <Navbar />
-      
-      {/* Hero */}
-      <section className="pt-32 pb-20 relative z-10 border-b border-white/10">
-        <div className="container mx-auto px-4 md:px-6 flex flex-col lg:flex-row items-center gap-12">
-          <div className="w-full lg:w-1/2">
+
+      {/* ═══ HERO ═══ */}
+      <section className="relative min-h-[90vh] flex items-center overflow-hidden pt-20">
+        <MatrixRain opacity={0.3} speed={1} className="pointer-events-none z-0" />
+        <div className="absolute inset-0 z-[1] pointer-events-none"
+          style={{ background: "radial-gradient(ellipse 70% 80% at 30% 50%, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.88) 60%, black 100%)" }} />
+
+        <div className="container mx-auto px-4 md:px-8 relative z-[2]">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            {/* Left text */}
+            <div>
+              <motion.div
+                initial={{ opacity: 0, x: -40 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8 }}
+              >
+                <div className="inline-flex items-center gap-2 mb-6 px-4 py-2 rounded-full font-mono text-xs"
+                  style={{ background: "rgba(255,100,0,0.08)", border: "1px solid rgba(255,100,0,0.25)", color: "#ff6600" }}>
+                  <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse" />
+                  UNDER THE HOOD
+                </div>
+
+                <h1 className="font-orbitron font-black leading-none mb-6"
+                  style={{ fontSize: "clamp(2.5rem, 6vw, 5.5rem)" }}>
+                  <span className="text-white">QUANTUM-</span>
+                  <br />
+                  <span style={{
+                    color: "transparent",
+                    backgroundImage: "linear-gradient(135deg, #00ffcc 0%, #0088ff 60%, #aa44ff 100%)",
+                    WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent",
+                    filter: "drop-shadow(0 0 25px rgba(0,255,204,0.35))",
+                  }}>RESILIENT CORE</span>
+                </h1>
+
+                <p className="text-xl text-gray-400 leading-relaxed mb-10">
+                  Nirpesh AI runs on a bespoke polymorphic inference engine. We rebuilt the entire neural stack from bare silicon — minimizing latency while maximizing contextual depth.
+                </p>
+
+                <div className="flex flex-wrap gap-3">
+                  {["Custom CUDA kernels", "Flash Attention v3", "FSDP distributed", "256K context"].map((tag) => (
+                    <span key={tag} className="flex items-center gap-2 px-3 py-2 rounded-xl font-mono text-xs"
+                      style={{ background: "rgba(0,255,204,0.06)", border: "1px solid rgba(0,255,204,0.18)", color: "#00ffcc99" }}>
+                      <ChevronRight size={11} style={{ color: "#00ffcc" }} />
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </motion.div>
+            </div>
+
+            {/* Right — helix */}
             <motion.div
-              initial={{ opacity: 0, x: -30 }}
+              initial={{ opacity: 0, x: 40 }}
               animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="flex items-center justify-center"
             >
-              <div className="inline-block glass-panel px-4 py-1 rounded-full border border-cyan-500/30 mb-6">
-                <span className="text-cyan-400 font-orbitron text-xs font-bold tracking-widest uppercase">Under The Hood</span>
-              </div>
-              <h1 className="text-5xl md:text-7xl font-orbitron font-black text-white mb-6 leading-tight">
-                Quantum-Resilient <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600">Core</span>
-              </h1>
-              <p className="text-xl text-gray-400 font-sans leading-relaxed mb-8">
-                Nirpesh AI runs on a bespoke polymorphic inference engine. We've rebuilt the neural stack to minimize latency while maximizing contextual depth.
-              </p>
+              <DigitalHelix className="h-[480px]" />
             </motion.div>
           </div>
-          <div className="w-full lg:w-1/2 h-[500px] relative">
-            <TechSection3D />
-          </div>
         </div>
       </section>
 
-      {/* Architecture Overview */}
-      <section className="py-24 container mx-auto px-4 md:px-6 relative z-10">
-        <h2 className="text-4xl md:text-5xl font-orbitron font-bold text-center text-white mb-16">Architecture Overview</h2>
-        
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-8">
-          {[
-            { step: "1", title: "Input Layer", desc: "Multi-modal ingestion pipeline that normalizes data with zero loss of fidelity." },
-            { step: "2", title: "Processing Core", desc: "Distributed GPU clusters executing parallel inference with predictive caching." },
-            { step: "3", title: "Output Synthesis", desc: "Contextual refinement and formatting tailored to the specific query protocol." },
-            { step: "4", title: "Distribution", desc: "Edge network delivery ensuring sub-50ms latency globally." }
-          ].map((layer, i) => (
-            <div key={i} className="glass-panel p-6 rounded-xl border border-white/5 hover:border-cyan-500/50 transition-all flex flex-col relative group">
-              <div className="absolute top-0 right-0 p-4 font-orbitron text-6xl font-black text-white/5 group-hover:text-cyan-500/10 transition-colors">
-                {layer.step}
-              </div>
-              <h3 className="font-orbitron font-bold text-xl text-white mb-4 relative z-10">{layer.title}</h3>
-              <p className="text-gray-400 text-sm relative z-10 flex-grow">{layer.desc}</p>
-              
-              {i !== 3 && (
-                <div className="hidden md:block absolute top-1/2 -right-6 w-4 h-0.5 bg-cyan-500/30" />
-              )}
-            </div>
-          ))}
-        </div>
-      </section>
+      {/* ═══ ARCH LAYERS ═══ */}
+      <section className="py-24 relative overflow-hidden border-y border-white/5">
+        <div className="absolute inset-0 pointer-events-none"
+          style={{ background: "radial-gradient(ellipse 70% 60% at 50% 50%, rgba(0,136,255,0.03) 0%, transparent 70%)" }} />
 
-      {/* Network Graph 3D Section */}
-      <section className="relative h-[600px] w-full bg-black border-y border-white/10">
-        <div className="absolute inset-0 z-0">
-          <WebGLErrorBoundary fallback={<div className="h-full w-full bg-cyan-900/10" />}>
-            <Canvas camera={{ position: [0, 0, 8], fov: 50 }}>
-              <ambientLight intensity={0.5} />
-              <OrbitControls enableZoom={false} autoRotate autoRotateSpeed={1} />
-              <NetworkGraph />
-            </Canvas>
-          </WebGLErrorBoundary>
-        </div>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none z-10 bg-black/50 p-8 rounded-3xl backdrop-blur-md border border-white/10">
-          <h3 className="text-3xl font-orbitron font-bold text-white mb-2 neon-glow">Neural Topology</h3>
-          <p className="text-cyan-200">Self-organizing semantic networks</p>
-        </div>
-      </section>
-
-      {/* Specs Table */}
-      <section className="py-24 container mx-auto px-4 md:px-6 relative z-10">
-        <h2 className="text-4xl md:text-5xl font-orbitron font-bold text-center text-white mb-16">Technical Specifications</h2>
-        
-        <div className="max-w-4xl mx-auto glass-panel rounded-2xl overflow-hidden border border-white/10">
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="bg-white/5 border-b border-white/10">
-                <th className="p-6 font-orbitron text-cyan-400 font-bold uppercase tracking-wider text-sm">Parameter</th>
-                <th className="p-6 font-orbitron text-cyan-400 font-bold uppercase tracking-wider text-sm">Specification</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-white/5 text-gray-300 font-sans">
-              <tr className="hover:bg-white/5 transition-colors">
-                <td className="p-6 font-medium text-white">Model Parameters</td>
-                <td className="p-6">1.2 Trillion (Dynamic Sparse Routing)</td>
-              </tr>
-              <tr className="hover:bg-white/5 transition-colors">
-                <td className="p-6 font-medium text-white">Average Latency</td>
-                <td className="p-6">~42ms (Edge-cached)</td>
-              </tr>
-              <tr className="hover:bg-white/5 transition-colors">
-                <td className="p-6 font-medium text-white">Context Window</td>
-                <td className="p-6">256K Tokens (Infinite rolling buffer via RAG)</td>
-              </tr>
-              <tr className="hover:bg-white/5 transition-colors">
-                <td className="p-6 font-medium text-white">Throughput</td>
-                <td className="p-6">150,000 requests / second / shard</td>
-              </tr>
-              <tr className="hover:bg-white/5 transition-colors">
-                <td className="p-6 font-medium text-white">Modality Support</td>
-                <td className="p-6">Text, Image, Audio, Code (Native AST)</td>
-              </tr>
-              <tr className="hover:bg-white/5 transition-colors">
-                <td className="p-6 font-medium text-white">Security Protocol</td>
-                <td className="p-6">SOC2 Type II, HIPAA, End-to-End Encryption</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      {/* ── 3D Code Showcase ── */}
-      <section className="relative overflow-hidden bg-black border-t border-white/5">
-        {/* Code rain fills the background */}
-        <div className="absolute inset-0 opacity-25 pointer-events-none">
-          <CodeRain3D />
-        </div>
-
-        <div className="relative z-10 container mx-auto px-4 py-20">
+        <div className="container mx-auto px-4 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-10"
+            className="text-center mb-16"
           >
-            <p className="text-orange-400 font-orbitron text-xs tracking-[0.35em] uppercase mb-3">Engine Room</p>
-            <h2 className="text-3xl md:text-5xl font-orbitron font-black text-white mb-4">
-              The Code That <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-red-500">Thinks</span>
+            <p className="text-blue-400 font-mono text-xs tracking-[0.35em] uppercase mb-3">// architecture</p>
+            <h2 className="text-4xl md:text-6xl font-orbitron font-black text-white">
+              Architecture <span style={{
+                color: "transparent", backgroundImage: "linear-gradient(90deg, #0088ff, #aa44ff)",
+                WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent"
+              }}>Overview</span>
             </h2>
-            <p className="text-gray-400 max-w-xl mx-auto">Three live inference modules spinning in real time — this is what runs under every request.</p>
           </motion.div>
 
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 max-w-6xl mx-auto">
+            {ARCH_LAYERS.map((layer, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 40, scale: 0.9 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1, duration: 0.6, ease: "backOut" }}
+                whileHover={{ y: -8, scale: 1.02 }}
+                className="relative rounded-2xl p-6 overflow-hidden group cursor-default"
+                style={{
+                  background: `linear-gradient(135deg, ${layer.color}0a 0%, rgba(0,0,0,0.8) 100%)`,
+                  border: `1px solid ${layer.color}22`,
+                  boxShadow: `0 0 20px ${layer.color}0a`,
+                  transition: "all 0.3s",
+                }}
+              >
+                <div className="absolute top-3 right-4 font-orbitron font-black text-5xl pointer-events-none select-none"
+                  style={{ color: layer.color, opacity: 0.06 }}>{layer.step}</div>
+
+                <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4"
+                  style={{ background: `${layer.color}14`, border: `1px solid ${layer.color}44` }}>
+                  <layer.icon size={22} style={{ color: layer.color }} />
+                </div>
+
+                <h3 className="font-orbitron font-bold text-white text-lg mb-2">{layer.title}</h3>
+                <p className="text-gray-400 text-sm leading-relaxed">{layer.desc}</p>
+
+                {/* Connector arrow */}
+                {i < ARCH_LAYERS.length - 1 && (
+                  <div className="hidden lg:block absolute -right-3 top-1/2 -translate-y-1/2 z-10">
+                    <div className="w-5 h-5 rounded-full flex items-center justify-center"
+                      style={{ background: `${layer.color}22`, border: `1px solid ${layer.color}44` }}>
+                      <ChevronRight size={11} style={{ color: layer.color }} />
+                    </div>
+                  </div>
+                )}
+
+                <motion.div
+                  className="absolute bottom-0 left-0 h-0.5"
+                  initial={{ width: 0 }}
+                  whileInView={{ width: "100%" }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.15 + 0.3, duration: 0.8 }}
+                  style={{ background: `linear-gradient(90deg, ${layer.color}88, transparent)` }}
+                />
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ NEURAL TOPOLOGY ═══ */}
+      <section className="py-24 relative bg-black overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none opacity-20">
+          <CodeRain3D />
+        </div>
+        <div className="container mx-auto px-4 relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <p className="text-purple-400 font-mono text-xs tracking-[0.35em] uppercase mb-3">// neural topology</p>
+            <h2 className="text-4xl md:text-5xl font-orbitron font-black text-white mb-4">
+              Self-Organizing{" "}
+              <span style={{
+                color: "transparent", backgroundImage: "linear-gradient(90deg, #aa44ff, #ff3c64)",
+                WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent"
+              }}>Semantic Network</span>
+            </h2>
+          </motion.div>
+          <NeuralNet3D className="w-full max-w-4xl mx-auto" style={{ height: 440 }} />
+        </div>
+      </section>
+
+      {/* ═══ SPECS ═══ */}
+      <section className="py-24 relative border-y border-white/5 overflow-hidden">
+        <MatrixRain opacity={0.07} speed={0.4} className="pointer-events-none z-0" />
+        <div className="container mx-auto px-4 relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <p className="text-cyan-400 font-mono text-xs tracking-[0.35em] uppercase mb-3">// technical specs</p>
+            <h2 className="text-4xl md:text-6xl font-orbitron font-black text-white">
+              Technical <span style={{
+                color: "transparent", backgroundImage: "linear-gradient(90deg, #00ffcc, #ff6600)",
+                WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent"
+              }}>Specifications</span>
+            </h2>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-5xl mx-auto">
+            {SPECS.map((spec, i) => <SpecBar key={i} spec={spec} i={i} />)}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ TECH STACK ═══ */}
+      <section className="py-24 relative overflow-hidden">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-14"
+          >
+            <p className="text-orange-400 font-mono text-xs tracking-[0.35em] uppercase mb-3">// engine room</p>
+            <h2 className="text-4xl md:text-5xl font-orbitron font-black text-white mb-4">
+              The Code That <span style={{
+                color: "transparent", backgroundImage: "linear-gradient(90deg, #ff6600, #ff3c64)",
+                WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent"
+              }}>Thinks</span>
+            </h2>
+          </motion.div>
+
+          <div className="flex flex-wrap justify-center gap-4 mb-20">
+            {TECH_STACK.map((t, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, scale: 0.8, y: 20 }}
+                whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.06, type: "spring", stiffness: 200 }}
+                whileHover={{ scale: 1.08, y: -4 }}
+                className="relative px-5 py-4 rounded-2xl cursor-default overflow-hidden"
+                style={{
+                  background: `linear-gradient(135deg, ${t.color}10, rgba(0,0,0,0.7))`,
+                  border: `1px solid ${t.color}33`,
+                  boxShadow: `0 0 20px ${t.color}11`,
+                  minWidth: 160,
+                }}
+              >
+                <p className="font-orbitron font-black text-white text-sm mb-1">{t.name}</p>
+                <p className="font-mono text-xs" style={{ color: t.color + "88" }}>{t.desc}</p>
+                <div className="absolute bottom-0 left-0 w-full h-0.5"
+                  style={{ background: `linear-gradient(90deg, transparent, ${t.color}66, transparent)` }} />
+              </motion.div>
+            ))}
+          </div>
+
+          {/* 3D code panels */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
+            transition={{ duration: 0.8 }}
             className="relative w-full"
             style={{ height: 560 }}
           >

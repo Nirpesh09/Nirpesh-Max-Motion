@@ -2,6 +2,7 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { AnimatedButton } from "@/components/AnimatedButton";
 import { FloatingCode } from "@/components/FloatingCode";
+import { MatrixRain } from "@/components/MatrixRain";
 import { DigitalHelix } from "@/components/DigitalHelix";
 import { CubeCode3D } from "@/components/CubeCode3D";
 import { HoloTerminal } from "@/components/HoloTerminal";
@@ -60,55 +61,119 @@ function Globe3D() {
 
 export default function About() {
   return (
-    <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
+    <div className="min-h-screen bg-black text-white overflow-x-hidden">
       <Navbar />
 
-      {/* Floating code background — whole page */}
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        <FloatingCode count={22} />
-      </div>
-      
-      {/* Hero */}
-      <section className="pt-40 pb-20 px-4 md:px-6 relative z-10 text-center container mx-auto">
-        <motion.h1 
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="text-6xl md:text-8xl font-orbitron font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 mb-8"
+      {/* ═══ HERO ═══ */}
+      <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden pt-20">
+        <MatrixRain opacity={0.28} speed={1.1} className="pointer-events-none z-0" />
+        <div className="absolute inset-0 z-[1] pointer-events-none"
+          style={{ background: "radial-gradient(ellipse 80% 70% at 50% 50%, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.82) 65%, black 100%)" }} />
+
+        {/* Decorative corner brackets */}
+        {[
+          { top: 80, left: 40 }, { top: 80, right: 40 },
+          { bottom: 40, left: 40 }, { bottom: 40, right: 40 },
+        ].map((pos, i) => (
+          <motion.div
+            key={i}
+            className="absolute pointer-events-none z-[2] hidden lg:block"
+            style={{ ...pos, width: 40, height: 40 }}
+            initial={{ opacity: 0 }} animate={{ opacity: 0.3 }} transition={{ delay: i * 0.1 + 0.5 }}
+          >
+            <svg viewBox="0 0 40 40" fill="none" stroke="#00ffcc" strokeWidth="1.5">
+              {i === 0 && <><path d="M0 20 L0 0 L20 0" /><circle cx="0" cy="0" r="3" fill="#00ffcc" /></>}
+              {i === 1 && <><path d="M40 20 L40 0 L20 0" /><circle cx="40" cy="0" r="3" fill="#00ffcc" /></>}
+              {i === 2 && <><path d="M0 20 L0 40 L20 40" /><circle cx="0" cy="40" r="3" fill="#00ffcc" /></>}
+              {i === 3 && <><path d="M40 20 L40 40 L20 40" /><circle cx="40" cy="40" r="3" fill="#00ffcc" /></>}
+            </svg>
+          </motion.div>
+        ))}
+
+        <div className="relative z-[3] text-center px-4 max-w-5xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: -15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="inline-flex items-center gap-2 mb-8 px-4 py-2 rounded-full font-mono text-xs"
+            style={{ background: "rgba(0,255,204,0.07)", border: "1px solid rgba(0,255,204,0.2)", color: "#00ffcc" }}
+          >
+            <motion.span animate={{ opacity: [1,0,1] }} transition={{ duration: 1.2, repeat: Infinity }}
+              className="w-2 h-2 rounded-full bg-cyan-400" />
+            NIRPESH AI · EST. 2023 · BUILDING THE FUTURE
+          </motion.div>
+
+          <motion.h1
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.25, duration: 0.9 }}
+            className="font-orbitron font-black leading-none mb-8"
+            style={{ fontSize: "clamp(3rem, 10vw, 8rem)" }}
+          >
+            <span className="text-white">WE ARE</span>
+            <br />
+            <span style={{
+              color: "transparent",
+              backgroundImage: "linear-gradient(135deg, #00ffcc 0%, #0088ff 40%, #aa44ff 80%, #ff6600 100%)",
+              WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent",
+              filter: "drop-shadow(0 0 35px rgba(0,255,204,0.45))",
+            }}>NIRPESH AI</span>
+          </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}
+            className="text-gray-300 text-xl md:text-2xl max-w-3xl mx-auto leading-relaxed mb-4"
+          >
+            Pioneering the boundary between synthetic logic and human intuition. Systems that don't just compute — they <em style={{ color: "#00ffcc", fontStyle: "normal" }}>understand</em>.
+          </motion.p>
+          <motion.p
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.65 }}
+            className="text-gray-500 text-lg max-w-2xl mx-auto"
+          >
+            Our mission: democratize advanced intelligence and make cognitive architecture accessible to every innovator on Earth.
+          </motion.p>
+        </div>
+
+        <motion.div
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 z-[3]"
+          animate={{ y: [0, 8, 0] }} transition={{ duration: 2, repeat: Infinity }}
         >
-          We Are Nirpesh AI
-        </motion.h1>
-        <motion.p 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3 }}
-          className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto font-sans leading-relaxed mb-6"
-        >
-          Pioneering the boundary between synthetic logic and human intuition. We are building systems that don't just compute—they understand.
-        </motion.p>
-        <motion.p 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.4 }}
-          className="text-lg text-gray-400 max-w-3xl mx-auto font-sans leading-relaxed"
-        >
-          Our mission is to democratize advanced intelligence, making cognitive architecture accessible to innovators globally.
-        </motion.p>
+          <div className="w-6 h-10 rounded-full border-2 border-cyan-500/25 flex items-start justify-center pt-2">
+            <motion.div animate={{ y: [0, 12, 0] }} transition={{ duration: 1.5, repeat: Infinity }}
+              className="w-1 h-1 rounded-full bg-cyan-400" />
+          </div>
+        </motion.div>
       </section>
 
       {/* Stats Bar */}
-      <section className="border-y border-white/10 bg-white/5 backdrop-blur-sm relative z-10">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 py-10">
+      <section className="relative border-y border-white/5 overflow-hidden">
+        <MatrixRain opacity={0.08} speed={0.5} className="pointer-events-none z-0" />
+        <div className="relative z-10 container mx-auto px-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-0 divide-x divide-white/5">
             {[
-              { label: "Team Members", value: "50+" },
-              { label: "Global Offices", value: "3" },
-              { label: "Enterprise Clients", value: "200+" },
-              { label: "Rating", value: "4.9/5" }
+              { label: "Enterprise Clients", value: "200+", color: "#00ffcc" },
+              { label: "Countries Served", value: "150+", color: "#ff6600" },
+              { label: "Queries Daily", value: "10M+", color: "#aa44ff" },
+              { label: "Rating", value: "4.9/5", color: "#00aaff" },
             ].map((stat, i) => (
-              <div key={i} className="text-center">
-                <div className="text-4xl font-orbitron font-bold text-cyan-400 mb-2">{stat.value}</div>
-                <div className="text-sm text-gray-400 uppercase tracking-widest">{stat.label}</div>
-              </div>
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="text-center py-10 px-6"
+              >
+                <motion.div
+                  className="font-orbitron font-black text-4xl md:text-5xl mb-2"
+                  style={{ color: stat.color, textShadow: `0 0 20px ${stat.color}66` }}
+                  animate={{ textShadow: [`0 0 15px ${stat.color}44`, `0 0 30px ${stat.color}88`, `0 0 15px ${stat.color}44`] }}
+                  transition={{ duration: 3, delay: i * 0.4, repeat: Infinity }}
+                >
+                  {stat.value}
+                </motion.div>
+                <div className="text-xs text-gray-500 uppercase tracking-[0.2em] font-mono">{stat.label}</div>
+              </motion.div>
             ))}
           </div>
         </div>
