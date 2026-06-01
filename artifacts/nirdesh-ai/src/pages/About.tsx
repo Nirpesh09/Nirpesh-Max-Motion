@@ -2,12 +2,17 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { AnimatedButton } from "@/components/AnimatedButton";
 import { FloatingCode } from "@/components/FloatingCode";
+import { DigitalHelix } from "@/components/DigitalHelix";
+import { CubeCode3D } from "@/components/CubeCode3D";
+import { HoloTerminal } from "@/components/HoloTerminal";
+import { NeuralNet3D } from "@/components/NeuralNet3D";
+import { HologramGrid } from "@/components/HologramGrid";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Float, OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
 import { useRef, useMemo } from "react";
 import { WebGLErrorBoundary } from "@/components/WebGLErrorBoundary";
-import { Building, Target, Zap, Users, Mail, MessageSquare, LifeBuoy } from "lucide-react";
+import { Building, Target, Zap, Users, Mail, MessageSquare, LifeBuoy, Code2, Cpu, BrainCircuit } from "lucide-react";
 import { motion } from "framer-motion";
 
 function Globe3D() {
@@ -185,30 +190,228 @@ export default function About() {
         </WebGLErrorBoundary>
       </section>
 
-      {/* Team */}
-      <section className="py-24 container mx-auto px-4 md:px-6 relative z-10">
-        <h2 className="text-4xl md:text-5xl font-orbitron font-bold text-center text-white mb-16">The Minds Behind It</h2>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {[
-            { name: "Aryan Mehta", role: "CEO", init: "AM", color: "bg-blue-600", bio: "Former quantum computing researcher with a vision for accessible AI." },
-            { name: "Priya Singh", role: "CTO", init: "PS", color: "bg-purple-600", bio: "Architected scalable neural networks for top-tier tech giants." },
-            { name: "Rohan Kapoor", role: "Head of Research", init: "RK", color: "bg-cyan-600", bio: "Published over 30 papers on adaptive machine learning algorithms." },
-            { name: "Anika Sharma", role: "Head of Product", init: "AS", color: "bg-pink-600", bio: "Translates complex cognitive models into intuitive user experiences." },
-            { name: "Dev Patel", role: "Lead Engineer", init: "DP", color: "bg-emerald-600", bio: "Master of zero-latency distributed systems and edge computing." },
-            { name: "Zara Khan", role: "VP of Growth", init: "ZK", color: "bg-amber-600", bio: "Scaling our planetary reach to bring AI to global markets." }
-          ].map((member, i) => (
-            <div key={i} className="glass-panel p-6 rounded-2xl flex items-center gap-6 hover:border-cyan-500/50 transition-colors">
-              <div className={`w-20 h-20 rounded-full ${member.color} flex items-center justify-center flex-shrink-0 text-white font-orbitron font-bold text-2xl shadow-lg`}>
-                {member.init}
+      {/* ── Founder ── */}
+      <section className="py-24 relative z-10 overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none opacity-20"><FloatingCode count={10} /></div>
+        <div className="container mx-auto px-4 md:px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-14"
+          >
+            <p className="text-cyan-400 font-orbitron text-xs tracking-[0.35em] uppercase mb-3">The Architect</p>
+            <h2 className="text-4xl md:text-5xl font-orbitron font-bold text-white">The Mind Behind It</h2>
+          </motion.div>
+
+          <div className="flex flex-col lg:flex-row items-center justify-center gap-12 max-w-5xl mx-auto">
+            {/* Left — helix + cube */}
+            <div className="flex flex-col items-center gap-6">
+              <DigitalHelix className="h-[440px]" />
+              <CubeCode3D className="mt-2" />
+            </div>
+
+            {/* Center — Founder card */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.85 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7, ease: "backOut" }}
+              className="flex-shrink-0"
+            >
+              <div
+                className="relative rounded-3xl overflow-hidden text-center p-10"
+                style={{
+                  background: "linear-gradient(135deg, rgba(0,255,204,0.06) 0%, rgba(0,100,255,0.08) 50%, rgba(170,68,255,0.06) 100%)",
+                  border: "1px solid rgba(0,255,204,0.25)",
+                  boxShadow: "0 0 60px rgba(0,255,204,0.12), 0 0 120px rgba(0,100,255,0.08)",
+                  width: 320,
+                }}
+              >
+                {/* Animated halo rings */}
+                {[0,1,2].map(i => (
+                  <motion.div
+                    key={i}
+                    className="absolute rounded-full pointer-events-none"
+                    style={{
+                      width: 140 + i * 40,
+                      height: 140 + i * 40,
+                      top: "50%", left: "50%",
+                      marginTop: -(70 + i * 20) - 30,
+                      marginLeft: -(70 + i * 20),
+                      border: `1px solid rgba(0,255,204,${0.2 - i * 0.06})`,
+                    }}
+                    animate={{ rotate: i % 2 === 0 ? [0, 360] : [0, -360], scale: [1, 1.05, 1] }}
+                    transition={{ rotate: { duration: 10 + i * 4, repeat: Infinity, ease: "linear" }, scale: { duration: 3, repeat: Infinity, ease: "easeInOut" } }}
+                  />
+                ))}
+
+                {/* Avatar */}
+                <div className="relative mx-auto mb-6" style={{ width: 110, height: 110 }}>
+                  <motion.div
+                    animate={{ rotate: [0, 360] }}
+                    transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                    className="absolute inset-0 rounded-full"
+                    style={{
+                      background: "conic-gradient(from 0deg, #00ffcc, #0066ff, #aa44ff, #ff6600, #00ffcc)",
+                      padding: 2,
+                    }}
+                  >
+                    <div className="w-full h-full rounded-full bg-black" />
+                  </motion.div>
+                  <div
+                    className="absolute inset-[3px] rounded-full flex items-center justify-center font-orbitron font-black text-5xl"
+                    style={{
+                      background: "radial-gradient(circle at 35% 35%, #00ffcc22, #0011330)",
+                      color: "transparent",
+                      backgroundImage: "linear-gradient(135deg, #00ffcc 0%, #0088ff 50%, #aa44ff 100%)",
+                      WebkitBackgroundClip: "text",
+                      backgroundClip: "text",
+                      WebkitTextFillColor: "transparent",
+                      filter: "drop-shadow(0 0 16px rgba(0,255,204,0.8))",
+                    }}
+                  >
+                    N
+                  </div>
+                </div>
+
+                {/* Name */}
+                <h3
+                  className="font-orbitron font-black text-4xl mb-2"
+                  style={{
+                    color: "transparent",
+                    backgroundImage: "linear-gradient(135deg, #ffffff 0%, #00ffcc 50%, #0088ff 100%)",
+                    WebkitBackgroundClip: "text",
+                    backgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    textShadow: "none",
+                    filter: "drop-shadow(0 0 12px rgba(0,255,204,0.5))",
+                  }}
+                >
+                  Nirpesh
+                </h3>
+
+                <div
+                  className="font-orbitron font-bold text-sm tracking-[0.2em] uppercase mb-6"
+                  style={{ color: "#00ffcc", textShadow: "0 0 12px rgba(0,255,204,0.7)" }}
+                >
+                  Founder &amp; CEO
+                </div>
+
+                {/* Stats row */}
+                <div className="grid grid-cols-3 gap-3 mb-6">
+                  {[
+                    { label: "Vision", val: "∞" },
+                    { label: "Models", val: "3+" },
+                    { label: "Impact", val: "Global" },
+                  ].map((s, i) => (
+                    <div key={i} className="rounded-xl py-2 px-1" style={{ background: "rgba(0,255,204,0.06)", border: "1px solid rgba(0,255,204,0.12)" }}>
+                      <div className="font-orbitron font-black text-cyan-400 text-lg">{s.val}</div>
+                      <div className="text-gray-500 text-xs uppercase tracking-wider mt-0.5">{s.label}</div>
+                    </div>
+                  ))}
+                </div>
+
+                <p className="text-gray-400 text-sm leading-relaxed mb-6">
+                  Visionary builder redefining the boundary of artificial intelligence. Architected Nirpesh AI from the ground up — from model training to global deployment.
+                </p>
+
+                {/* Skill bars */}
+                {[
+                  { skill: "AI Engineering", pct: 98, color: "#00ffcc" },
+                  { skill: "System Architecture", pct: 95, color: "#0088ff" },
+                  { skill: "Product Vision", pct: 99, color: "#aa44ff" },
+                ].map((bar, i) => (
+                  <div key={i} className="mb-3 text-left">
+                    <div className="flex justify-between mb-1">
+                      <span className="font-mono text-xs text-gray-400">{bar.skill}</span>
+                      <span className="font-mono text-xs" style={{ color: bar.color }}>{bar.pct}%</span>
+                    </div>
+                    <div className="h-1 rounded-full bg-white/5 overflow-hidden">
+                      <motion.div
+                        initial={{ width: 0 }}
+                        whileInView={{ width: `${bar.pct}%` }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 1.2, delay: i * 0.2, ease: "easeOut" }}
+                        className="h-full rounded-full"
+                        style={{ background: `linear-gradient(90deg, ${bar.color}88, ${bar.color})`, boxShadow: `0 0 8px ${bar.color}` }}
+                      />
+                    </div>
+                  </div>
+                ))}
+
+                {/* Contact */}
+                <motion.a
+                  href="mailto:ainirpesh@gmail.com"
+                  whileHover={{ scale: 1.05 }}
+                  className="mt-4 inline-flex items-center gap-2 px-6 py-2.5 rounded-xl font-mono text-sm font-bold text-black"
+                  style={{ background: "linear-gradient(135deg, #00ffcc, #0088ff)", boxShadow: "0 0 20px rgba(0,255,204,0.4)" }}
+                >
+                  <Mail size={14} />
+                  ainirpesh@gmail.com
+                </motion.a>
               </div>
-              <div>
-                <h3 className="font-orbitron font-bold text-white text-xl">{member.name}</h3>
-                <div className="text-cyan-400 text-sm font-medium mb-2">{member.role}</div>
-                <p className="text-gray-400 text-xs">{member.bio}</p>
+            </motion.div>
+
+            {/* Right — terminal */}
+            <div className="flex flex-col gap-6 w-full max-w-sm">
+              <HoloTerminal />
+              <div
+                className="glass-panel rounded-2xl p-5 border-cyan-500/20"
+                style={{ background: "rgba(0,0,0,0.7)" }}
+              >
+                <p className="text-cyan-400 font-orbitron text-xs tracking-widest uppercase mb-3">Founder Philosophy</p>
+                {[
+                  { icon: BrainCircuit, text: "Build AI that empowers, not replaces." },
+                  { icon: Code2, text: "Every line of code is a step toward the future." },
+                  { icon: Cpu, text: "Intelligence without limits, ethics without compromise." },
+                ].map((item, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, x: 20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.15 }}
+                    className="flex items-start gap-3 mb-4"
+                  >
+                    <div className="w-8 h-8 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <item.icon size={14} className="text-cyan-400" />
+                    </div>
+                    <p className="text-gray-300 text-sm">{item.text}</p>
+                  </motion.div>
+                ))}
               </div>
             </div>
-          ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Neural Network Visualizer ── */}
+      <section className="py-20 bg-black relative z-10 overflow-hidden border-y border-white/5">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-10"
+          >
+            <p className="text-purple-400 font-orbitron text-xs tracking-[0.35em] uppercase mb-3">Under the Hood</p>
+            <h2 className="text-3xl md:text-5xl font-orbitron font-black text-white mb-4">
+              Live <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500">Neural Architecture</span>
+            </h2>
+            <p className="text-gray-400 max-w-lg mx-auto">Every inference request travels this exact path — from raw input tokens to intelligent output.</p>
+          </motion.div>
+          <NeuralNet3D className="w-full max-w-3xl mx-auto" style={{ height: 480 }} />
+        </div>
+      </section>
+
+      {/* ── Hologram Grid ── */}
+      <section className="relative z-10 overflow-hidden bg-black" style={{ height: 320 }}>
+        <HologramGrid className="h-full" />
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
+          <h2 className="font-orbitron font-black text-white/8 text-[5rem] md:text-[8rem] uppercase tracking-[0.2em] whitespace-nowrap select-none">
+            NIRPESH AI
+          </h2>
         </div>
       </section>
 
